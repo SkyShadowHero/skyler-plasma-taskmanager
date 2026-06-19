@@ -36,6 +36,7 @@ KCMUtils.SimpleKCM {
     property alias cfg_minimizeActiveTaskOnClick: minimizeActive.checked
     property alias cfg_unhideOnAttention: unhideOnAttention.checked
     property alias cfg_reverseMode: reverseMode.checked
+    property alias cfg_animationSpeed: animationSpeed.currentIndex
 
     headerPaddingEnabled: false
     header: ColumnLayout {
@@ -301,6 +302,21 @@ KCMUtils.SimpleKCM {
                 }
             }
             QQC2.ButtonGroup.group: reverseModeRadioButtonGroup
+        }
+
+        Item {
+            Kirigami.FormData.isSection: true
+        }
+
+        QQC2.ComboBox {
+            id: animationSpeed
+            Kirigami.FormData.label: i18nc("@label:listbox", "Animation speed:")
+            Layout.fillWidth: true
+            model: [
+                i18nc("@item:inlistbox animation speed", "Fast"),
+                i18nc("@item:inlistbox animation speed", "Normal"),
+                i18nc("@item:inlistbox animation speed", "Slow")
+            ]
         }
     }
 }

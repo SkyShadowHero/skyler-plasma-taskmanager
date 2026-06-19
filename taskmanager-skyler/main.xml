@@ -154,6 +154,15 @@
       <label> Spacing between icons in task manager. Margin is multiplied by this value.</label>
       <default>1</default>
     </entry>
+    <entry name="animationSpeed" type="Enum">
+      <label>Controls the speed of entry and minimize animations. 0=Fast, 1=Normal, 2=Slow.</label>
+      <choices>
+        <choice name="Fast"/>
+        <choice name="Normal"/>
+        <choice name="Slow"/>
+      </choices>
+      <default>1</default>
+    </entry>
   </group>
 
 </kcfg>

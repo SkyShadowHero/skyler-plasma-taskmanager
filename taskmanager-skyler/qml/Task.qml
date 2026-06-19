@@ -71,6 +71,15 @@ PlasmaCore.ToolTipArea {
     property bool delayAudioStreamIndicator: false
     property bool completed: false
 
+    // Animation speed: 0=Fast, 1=Normal, 2=Slow.  Scales entry+minimize only.
+    readonly property real animMul: {
+        switch (Plasmoid.configuration.animationSpeed) {
+            case 0: return 0.5;
+            case 2: return 1.5;
+            default: return 1.0;
+        }
+    }
+
     // Suppress minimise animation for newly-appeared tasks
     // (e.g. virtual-desktop switch where IsMinimized arrives set).
     Timer { id: entryCooldown; interval: 300 }
@@ -93,20 +102,20 @@ PlasmaCore.ToolTipArea {
     SequentialAnimation {
         id: entryAnim
         ParallelAnimation {
-            NumberAnimation { target: icon; property: "opacity"; from: 0.0; to: 1.0; duration: 200; easing.type: Easing.OutQuad }
-            NumberAnimation { target: entrySlide; property: "y"; from: 30; to: 0; duration: 200; easing.type: Easing.OutBack }
+            NumberAnimation { target: icon; property: "opacity"; from: 0.0; to: 1.0; duration: 200 * task.animMul; easing.type: Easing.OutQuad }
+            NumberAnimation { target: entrySlide; property: "y"; from: 30; to: 0; duration: 200 * task.animMul; easing.type: Easing.OutBack }
         }
     }
     SequentialAnimation {
         id: minimizeAnim
         PauseAnimation { duration: 50 }
         ParallelAnimation {
-            NumberAnimation { target: icon; property: "opacity"; to: 0.5; duration: 80; easing.type: Easing.InQuad }
-            NumberAnimation { target: minimizeBounce; property: "y"; to: 10; duration: 80; easing.type: Easing.InQuad }
+            NumberAnimation { target: icon; property: "opacity"; to: 0.5; duration: 80 * task.animMul; easing.type: Easing.InQuad }
+            NumberAnimation { target: minimizeBounce; property: "y"; to: 10; duration: 80 * task.animMul; easing.type: Easing.InQuad }
         }
         ParallelAnimation {
-            NumberAnimation { target: icon; property: "opacity"; to: 1.0; duration: 120; easing.type: Easing.OutQuad }
-            NumberAnimation { target: minimizeBounce; property: "y"; to: 0; duration: 120; easing.type: Easing.OutQuad }
+            NumberAnimation { target: icon; property: "opacity"; to: 1.0; duration: 120 * task.animMul; easing.type: Easing.OutQuad }
+            NumberAnimation { target: minimizeBounce; property: "y"; to: 0; duration: 120 * task.animMul; easing.type: Easing.OutQuad }
         }
     }
     NumberAnimation {
