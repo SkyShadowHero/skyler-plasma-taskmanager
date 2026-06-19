@@ -39,9 +39,11 @@ find_package(LibNotificationManager REQUIRED)  # → PW::LibNotificationManager
 
 # ── Build ────────────────────────────────────────────
 add_subdirectory(taskmanager-skyler)
+add_subdirectory(kickoff-skyler)
 
-# ── Install icontasks-skyler wrapper ─────────────────
+# ── Install wrapper packages ─────────────────────────
 plasma_install_package(icontasks-skyler org.kde.plasma.icontasks.skyler)
+plasma_install_package(kickoff-skyler org.kde.plasma.kickoff.skyler)
 
 # ── Reuse original taskmanager translations ──────────
 install(CODE "
@@ -49,6 +51,7 @@ install(CODE "
     set(SKYLER_DOMAINS
         plasma_applet_org.kde.plasma.icontasks.skyler
         plasma_applet_org.kde.plasma.taskmanager.skyler
+        plasma_applet_org.kde.plasma.kickoff.skyler
     )
     file(GLOB LOCALE_DIRS /usr/share/locale/*/LC_MESSAGES)
     foreach(LOCALE_DIR \${LOCALE_DIRS})
@@ -59,6 +62,21 @@ install(CODE "
                     \"\${ORIG_DOMAIN}.mo\"
                     \"\${LOCALE_DIR}/\${SKYLER_DOMAIN}.mo\")
             endforeach()
+        endif()
+    endforeach()
+")
+
+# ── Reuse original kickoff translations ─────────────
+install(CODE "
+    set(ORIG_DOMAIN plasma_applet_org.kde.plasma.kickoff)
+    set(SKYLER_DOMAIN plasma_applet_org.kde.plasma.kickoff.skyler)
+    file(GLOB LOCALE_DIRS /usr/share/locale/*/LC_MESSAGES)
+    foreach(LOCALE_DIR \${LOCALE_DIRS})
+        set(ORIG_MO \"\${LOCALE_DIR}/\${ORIG_DOMAIN}.mo\")
+        if(EXISTS \"\${ORIG_MO}\")
+            execute_process(COMMAND \${CMAKE_COMMAND} -E create_symlink
+                \"\${ORIG_DOMAIN}.mo\"
+                \"\${LOCALE_DIR}/\${SKYLER_DOMAIN}.mo\")
         endif()
     endforeach()
 ")
