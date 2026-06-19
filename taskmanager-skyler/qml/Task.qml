@@ -58,6 +58,7 @@ PlasmaCore.ToolTipArea {
     property bool toolTipOpen: false
     property bool inPopup: false
     property bool isWindow: model.IsWindow
+    property bool minimizeFromClick: false
     property int childCount: model.ChildCount
     property int previousChildCount: 0
     property alias labelText: label.text
@@ -147,6 +148,10 @@ PlasmaCore.ToolTipArea {
         Translate { id: translateTransform },
         Translate { id: entrySlide; y: 0 }
     ]
+
+    Behavior on opacity {
+        NumberAnimation { duration: 180; easing.type: Easing.InQuad }
+    }
     SequentialAnimation {
         id: entryAnim
         ParallelAnimation {
@@ -155,17 +160,17 @@ PlasmaCore.ToolTipArea {
         }
     }
     SequentialAnimation {
-        id: minimizeAnim
-        PauseAnimation { duration: 100 }
-        NumberAnimation { target: minimizeBounce; property: "y"; to: 10; duration: 80; easing.type: Easing.InQuad }
-        NumberAnimation { target: minimizeBounce; property: "y"; to: 0; duration: 120; easing.type: Easing.OutQuad }
-    }
-    SequentialAnimation {
-        id: closeAnim
+        id: closeWindow
         ParallelAnimation {
             NumberAnimation { target: task; property: "opacity"; to: 0.0; duration: 180; easing.type: Easing.InQuad }
             NumberAnimation { target: entrySlide; property: "y"; to: 20; duration: 180; easing.type: Easing.InCubic }
         }
+    }
+    SequentialAnimation {
+        id: minimizeAnim
+        PauseAnimation { duration: 100 }
+        NumberAnimation { target: minimizeBounce; property: "y"; to: 10; duration: 80; easing.type: Easing.InQuad }
+        NumberAnimation { target: minimizeBounce; property: "y"; to: 0; duration: 120; easing.type: Easing.OutQuad }
     }
     NumberAnimation {
         id: pressDownAnim
@@ -254,7 +259,7 @@ PlasmaCore.ToolTipArea {
             updateAudioStreams({delay: false});
         } else if (!model.HasLauncher && !model.IsLauncher) {
             // Window closed without a launcher: slide down + fade out
-            closeAnim.start();
+            closeWindow.start();
         }
     }
 
@@ -459,6 +464,9 @@ PlasmaCore.ToolTipArea {
         function leftClick(): void {
             if (task.active) {
                 task.hideToolTip();
+            }
+            if (model.IsActive) {
+                task.minimizeFromClick = true;
             }
             TaskManagerApplet.TaskTools.activateTask(modelIndex(), model, point.modifiers, task, Plasmoid, tasksRoot, effectWatcher.registered);
         }
@@ -719,7 +727,13 @@ PlasmaCore.ToolTipArea {
                 frame.basePrefix: "minimized"
             }
             StateChangeScript {
-                script: minimizeAnim.start()
+                script: {
+                    if (task.minimizeFromClick) {
+                        task.minimizeFromClick = false;
+                    } else {
+                        minimizeAnim.start();
+                    }
+                }
             }
         },
         State {
@@ -752,6 +766,9 @@ PlasmaCore.ToolTipArea {
         completed = true;
     }
     Component.onDestruction: {
+        if (!model.IsLauncher && !model.HasLauncher && model.IsWindow) {
+            task.opacity = 0.0;
+        }
         if (moveAnim.running) {
             (task.parent as TaskList).animationsRunning -= 1;
         }
