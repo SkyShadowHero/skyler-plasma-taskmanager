@@ -674,10 +674,9 @@ PlasmaCore.ToolTipArea {
                     if (entryCooldown.running) return;  // just appeared
                     if (task.minimizeFromClick) {
                         task.minimizeFromClick = false;
-                        minimizeAnim.start();
-                    } else {
-                        minimizeDelay.start();
+                        return;  // skip animation on click
                     }
+                    minimizeDelay.start();
                 }
             }
         },
