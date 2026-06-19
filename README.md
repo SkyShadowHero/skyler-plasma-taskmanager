@@ -1,3 +1,5 @@
+[中文](READMECN.md)
+
 # SkyAnimation Plasma Plugins
 
 Forked KDE Plasma 6 plasmoids with press / entry / minimize animations.
@@ -6,7 +8,7 @@ Forked KDE Plasma 6 plasmoids with press / entry / minimize animations.
 
 | Plugin | ID | Animations |
 |--------|-----|------------|
-| Icons-Only Task Manager (SkyAnimation) | `org.kde.plasma.icontasks.skyler` | press scale · entry slide-in · minimize bounce |
+| Task Manager (SkyAnimation) | `org.kde.plasma.icontasks.skyler` | press scale · entry slide-in · minimize bounce |
 | Application Launcher (SkyAnimation) | `org.kde.plasma.kickoff.skyler` | press scale |
 
 
