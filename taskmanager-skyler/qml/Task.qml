@@ -94,7 +94,6 @@ PlasmaCore.ToolTipArea {
             oldX = x;
             return;
         }
-        moveAnim.x = oldX - x + translateTransform.x;
         moveAnim.y = translateTransform.y;
         oldX = x;
         moveAnim.restart();
@@ -129,14 +128,6 @@ PlasmaCore.ToolTipArea {
         ParallelAnimation {
             NumberAnimation {
                 target: translateTransform
-                properties: "x"
-                from: moveAnim.x
-                to: 0
-                easing.type: Easing.OutQuad
-                duration: Kirigami.Units.longDuration
-            }
-            NumberAnimation {
-                target: translateTransform
                 properties: "y"
                 from: moveAnim.y
                 to: 0
@@ -144,6 +135,11 @@ PlasmaCore.ToolTipArea {
                 duration: Kirigami.Units.longDuration
             }
         }
+    }
+
+    Behavior on x {
+        enabled: !entering
+        NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
     }
     transform: [
         Translate { id: translateTransform },
