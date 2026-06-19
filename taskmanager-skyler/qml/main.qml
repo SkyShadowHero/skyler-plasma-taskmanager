@@ -75,14 +75,14 @@ PlasmoidItem {
         if (vertical) {
             return Kirigami.Units.gridUnit * 10;
         }
-        return taskList.Layout.maximumWidth
+        return taskList.maxWidth
     }
     Layout.preferredHeight: {
         if (shouldShrinkToZero) {
             return 0.01;
         }
         if (vertical) {
-            return taskList.Layout.maximumHeight
+            return taskList.implicitHeight
         }
         return Kirigami.Units.gridUnit * 2;
     }
@@ -310,7 +310,7 @@ PlasmoidItem {
             repeat: false
 
             onTriggered: {
-                tasks.publishIconGeometries(taskList.children, tasks);
+                tasks.publishIconGeometries(taskList.rowLayout.children, tasks);
             }
         }
 
@@ -441,23 +441,23 @@ PlasmoidItem {
                 readonly property real widthOccupation: taskRepeater.count / columns
                 readonly property real heightOccupation: taskRepeater.count / rows
 
-                Layout.maximumWidth: {
-                    const totalMaxWidth = children.reduce((accumulator, child) => {
-                            if (!isFinite(child.Layout.maximumWidth)) {
-                                return accumulator;
-                            }
-                            return accumulator + child.Layout.maximumWidth
-                        }, 0);
-                    return Math.round(totalMaxWidth / widthOccupation);
+                maxWidth: {
+                    const kids = taskList.rowLayout.children;
+                    let total = 0;
+                    for (let i = 0; i < kids.length; i++) {
+                        const w = kids[i].implicitWidth || kids[i].width;
+                        if (isFinite(w)) total += w;
+                    }
+                    return Math.round(total / widthOccupation);
                 }
                 Layout.maximumHeight: {
-                    const totalMaxHeight = children.reduce((accumulator, child) => {
-                            if (!isFinite(child.Layout.maximumHeight)) {
-                                return accumulator;
-                            }
-                            return accumulator + child.Layout.maximumHeight
-                        }, 0);
-                    return Math.round(totalMaxHeight / heightOccupation);
+                    const kids = taskList.rowLayout.children;
+                    let total = 0;
+                    for (let i = 0; i < kids.length; i++) {
+                        const h = kids[i].implicitHeight || kids[i].height;
+                        if (isFinite(h)) total += h;
+                    }
+                    return Math.round(total / heightOccupation);
                 }
                 width: {
                     if (tasks.shouldShrinkToZero) {
@@ -466,7 +466,7 @@ PlasmoidItem {
                     if (tasks.vertical) {
                         return tasks.width * Math.min(1, widthOccupation);
                     } else {
-                        return Math.min(tasks.width, Layout.maximumWidth);
+                        return Math.min(tasks.width, maxWidth);
                     }
                 }
                 height: {
