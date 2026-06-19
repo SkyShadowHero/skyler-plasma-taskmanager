@@ -85,12 +85,10 @@ PlasmaCore.ToolTipArea {
     location: Plasmoid.location
     mainItem: !Plasmoid.configuration.showToolTips || !model.IsWindow ? pinnedAppToolTipDelegate : openWindowToolTipDelegate
 
-    transform: Translate { id: entrySlide; y: 0 }
-
     SequentialAnimation {
         id: entryAnim
         ParallelAnimation {
-            NumberAnimation { target: task; property: "opacity"; from: 0.0; to: 1.0; duration: 200; easing.type: Easing.OutQuad }
+            NumberAnimation { target: icon; property: "opacity"; from: 0.0; to: 1.0; duration: 200; easing.type: Easing.OutQuad }
             NumberAnimation { target: entrySlide; property: "y"; from: 30; to: 0; duration: 200; easing.type: Easing.OutBack }
         }
     }
@@ -529,10 +527,10 @@ PlasmaCore.ToolTipArea {
                 && task.smartLauncherItem && task.smartLauncherItem.countVisible
         source: "TaskBadgeOverlay.qml"
 
-        transform: Translate {
-            id: minimizeBounce
-            y: 0
-        }
+        transform: [
+            Translate { id: entrySlide; y: 0 },
+            Translate { id: minimizeBounce; y: 0 }
+        ]
 
         function adjustMargin(isVertical: bool, size: real, margin: real): real {
             if (!size) {
@@ -684,7 +682,7 @@ PlasmaCore.ToolTipArea {
         }
         // Entry animation only for truly new windows (skip windows spawned from pinned launchers)
         if (model.IsWindow && !model.IsLauncher && !model.HasLauncher) {
-            task.opacity = 0.0;
+            icon.opacity = 0.0;
             entrySlide.y = 30;
             entryAnim.start();
         }
