@@ -156,6 +156,7 @@ PlasmaCore.ToolTipArea {
     }
     SequentialAnimation {
         id: minimizeAnim
+        PauseAnimation { duration: 100 }
         NumberAnimation { target: minimizeBounce; property: "y"; to: 10; duration: 80; easing.type: Easing.InQuad }
         NumberAnimation { target: minimizeBounce; property: "y"; to: 0; duration: 120; easing.type: Easing.OutQuad }
     }
