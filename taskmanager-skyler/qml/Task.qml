@@ -150,7 +150,7 @@ PlasmaCore.ToolTipArea {
     SequentialAnimation {
         id: entryAnim
         ParallelAnimation {
-            NumberAnimation { target: icon; property: "scale"; from: 0.0; to: 1.0; duration: 200; easing.type: Easing.OutCubic }
+            NumberAnimation { target: icon; property: "scale"; from: 0.5; to: 1.0; duration: 200; easing.type: Easing.OutCubic }
             NumberAnimation { target: task; property: "opacity"; from: 0.0; to: 1.0; duration: 200; easing.type: Easing.OutQuad }
             NumberAnimation { target: entrySlide; property: "y"; from: 30; to: 0; duration: 200; easing.type: Easing.OutCubic }
         }
@@ -739,9 +739,9 @@ PlasmaCore.ToolTipArea {
         if (!inPopup && !model.IsWindow) {
             taskInitComponent.createObject(task);
         }
-        // Entry animation only for new windows, not for pinned launchers
-        if (model.IsWindow && !model.IsLauncher && !model.HasLauncher) {
-            icon.scale = 0.0;
+        // Entry animation only for truly new windows (no launcher URL = not from pinned icon)
+        if (model.IsWindow && !model.IsLauncher && model.LauncherUrl.toString() === "") {
+            icon.scale = 0.5;
             task.opacity = 0.0;
             entrySlide.y = 30;
             entryAnim.start();
