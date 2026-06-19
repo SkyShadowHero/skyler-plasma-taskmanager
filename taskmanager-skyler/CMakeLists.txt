@@ -35,6 +35,7 @@ plasma_add_applet(org.kde.plasma.taskmanager.skyler
 
 kconfig_add_kcfg_files(org.kde.plasma.taskmanager.skyler ${CMAKE_CURRENT_SOURCE_DIR}/kactivitymanagerd_plugins_settings.kcfgc)
 
+include(ECMQtDeclareLoggingCategory)
 ecm_qt_declare_logging_category(org.kde.plasma.taskmanager.skyler
     HEADER log_settings_skyler.h
     IDENTIFIER TASKMANAGER_SKYLER_DEBUG
