@@ -1,13 +1,13 @@
 # SkyAnimation Plasma Plugins
 
-Forked KDE Plasma 6 plasmoids with press/entry/minimize animations.
+Forked KDE Plasma 6 plasmoids with press / entry / minimize animations.
 
 ## Plugins
 
 | Plugin | ID | Animations |
 |--------|-----|------------|
-| 图标任务管理器 (SkyAnimation) | `org.kde.plasma.icontasks.skyler` | 按压缩放 / 入场弹出 / 最小化弹跳 |
-| 应用启动器 (SkyAnimation) | `org.kde.plasma.kickoff.skyler` | 按压缩放（弹性回弹） |
+| 图标任务管理器 (SkyAnimation) | `org.kde.plasma.icontasks.skyler` | 按压缩放 · 入场滑入 · 最小化弹跳 |
+| 应用启动器 (SkyAnimation) | `org.kde.plasma.kickoff.skyler` | 按压缩放 |
 
 ## Requirements (Arch / CachyOS)
 
@@ -28,13 +28,12 @@ rm -rf ~/.cache/plasma* ~/.cache/kpackage*
 systemctl restart --user plasma-plasmashell
 ```
 
-Then: right-click panel → Add Widgets → search **SkyAnimation**.
+Right-click panel → Add Widgets → search **SkyAnimation**.
 
-## Rebuild after code changes
+## Rebuild after changes
 
 ```bash
-cd build
-make -j$(nproc) && sudo make install
+cd build && make -j$(nproc) && sudo make install
 systemctl restart --user plasma-plasmashell
 ```
 
