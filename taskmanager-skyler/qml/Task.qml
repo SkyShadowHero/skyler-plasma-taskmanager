@@ -143,8 +143,17 @@ PlasmaCore.ToolTipArea {
             }
         }
     }
-    transform: Translate {
-        id: translateTransform
+    transform: [
+        Translate { id: translateTransform },
+        Translate { id: entrySlide; y: 0 }
+    ]
+    SequentialAnimation {
+        id: entryAnim
+        ParallelAnimation {
+            NumberAnimation { target: icon; property: "scale"; from: 0.3; to: 1.0; duration: 280; easing.type: Easing.OutBack }
+            NumberAnimation { target: task; property: "opacity"; from: 0.0; to: 1.0; duration: 280; easing.type: Easing.OutQuad }
+            NumberAnimation { target: entrySlide; property: "y"; from: 25; to: 0; duration: 280; easing.type: Easing.OutCubic }
+        }
     }
     NumberAnimation {
         id: pressDownAnim
@@ -711,6 +720,11 @@ PlasmaCore.ToolTipArea {
         if (!inPopup && !model.IsWindow) {
             taskInitComponent.createObject(task);
         }
+        // Entry animation: pop in from below
+        icon.scale = 0.3;
+        task.opacity = 0.0;
+        entrySlide.y = 25;
+        entryAnim.start();
         completed = true;
     }
     Component.onDestruction: {
