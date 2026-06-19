@@ -9,6 +9,19 @@ set(CMAKE_AUTOMOC ON)
 find_package(ECM REQUIRED CONFIG)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
+# Set KDE install dirs before any find_package that pulls in GNUInstallDirs
+if(NOT DEFINED KDE_INSTALL_PLUGINDIR)
+    set(KDE_INSTALL_PLUGINDIR "${CMAKE_INSTALL_PREFIX}/lib/plugins" CACHE PATH "KDE plugin install dir")
+endif()
+if(NOT DEFINED KDE_INSTALL_QMLDIR)
+    set(KDE_INSTALL_QMLDIR "${CMAKE_INSTALL_PREFIX}/lib/qt6/qml" CACHE PATH "QML install dir")
+endif()
+
+# Plasma macros set LIBRARY_OUTPUT_DIRECTORY based on CMAKE_LIBRARY_OUTPUT_DIRECTORY
+if(NOT DEFINED CMAKE_LIBRARY_OUTPUT_DIRECTORY)
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+endif()
+
 # ── Qt ───────────────────────────────────────────────
 find_package(Qt6 REQUIRED COMPONENTS Core Qml Quick)
 

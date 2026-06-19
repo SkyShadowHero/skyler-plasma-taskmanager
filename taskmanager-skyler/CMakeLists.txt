@@ -41,6 +41,9 @@ ecm_qt_declare_logging_category(org.kde.plasma.taskmanager.skyler
     IDENTIFIER TASKMANAGER_SKYLER_DEBUG
     CATEGORY_NAME org.kde.plasma.taskmanager.skyler)
 
+# Ensure generated headers (kcfg, logging) are found
+target_include_directories(org.kde.plasma.taskmanager.skyler PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+
 target_link_libraries(org.kde.plasma.taskmanager.skyler PRIVATE
     Qt::Core
     Qt::Qml
