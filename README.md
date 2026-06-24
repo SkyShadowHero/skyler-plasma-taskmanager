@@ -32,7 +32,7 @@ Restart plasmashell:
 plasmashell --replace &
 ```
 
-Right-click panel → Add Widgets → search **SkyAnimation**.
+Right-click panel → Add Widgets.
 
 ## Credits
 
