@@ -171,11 +171,15 @@ PlasmaCore.ToolTipArea {
     }
 
     // Reappear animation for multi-window close: scale up + fade in (with bounce)
+    // Must also restore entrySlide.y/minimizeBounce.y to undo exitAnim's offset,
+    // otherwise the icon stays shifted down 50px and appears empty.
     SequentialAnimation {
         id: reappearAnim
         ParallelAnimation {
             NumberAnimation { target: icon; property: "scale"; from: 0.5; to: 1.0; duration: 70 * task.animMul; easing.type: Easing.OutBack }
             NumberAnimation { target: icon; property: "opacity"; from: 0; to: 1.0; duration: 70 * task.animMul; easing.type: Easing.OutQuad }
+            NumberAnimation { target: entrySlide; property: "y"; to: 0; duration: 70 * task.animMul; easing.type: Easing.OutQuad }
+            NumberAnimation { target: minimizeBounce; property: "y"; to: 0; duration: 70 * task.animMul; easing.type: Easing.OutQuad }
         }
     }
 
