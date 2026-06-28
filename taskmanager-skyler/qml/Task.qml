@@ -196,6 +196,17 @@ PlasmaCore.ToolTipArea {
         }
     }
 
+    // Bump animation: when a new window joins an existing group, briefly pop up.
+    SequentialAnimation {
+        id: bumpAnim
+        ParallelAnimation {
+            NumberAnimation { target: entrySlide; property: "y"; to: -4; duration: 80 * task.animMul; easing.type: Easing.OutQuad }
+        }
+        ParallelAnimation {
+            NumberAnimation { target: entrySlide; property: "y"; to: 0; duration: 120 * task.animMul; easing.type: Easing.OutBounce }
+        }
+    }
+
     // Pulse animation when one of multiple windows closes but icon stays
     // Brief scale up + opacity dip, then return to normal
     SequentialAnimation {
@@ -354,8 +365,9 @@ PlasmaCore.ToolTipArea {
         previousChildCount = childCount;
     }
 
-    // Detect child window removals from the group by tracking WinIdList length.
-    // When a window closes: list shrinks. If still >0 → icon stays → play exit+reappear.
+    // Detect child window additions/removals from the group by tracking WinIdList length.
+    // When a window closes: list shrinks → exit+reappear animation.
+    // When a new window joins an existing group: list grows → bump animation.
     onWinIdListChanged: {
         var newLen = task.winIdList ? task.winIdList.length : 0;
         if (newLen < task.lastWinCount && newLen > 0) {
@@ -364,6 +376,11 @@ PlasmaCore.ToolTipArea {
                 exitAnim.start();
             }
             // exitAnim.onFinished triggers reappearAnim (see exitAnim definition)
+        } else if (newLen > task.lastWinCount && task.lastWinCount > 0) {
+            // New window joined existing group → bump up
+            if (bumpAnim) {
+                bumpAnim.start();
+            }
         }
         task.lastWinCount = newLen;
     }
